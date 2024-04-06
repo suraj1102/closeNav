@@ -34,7 +34,7 @@ public:
         int y1 = y, y2 = node->y;
 
         float h_dist = x2 - x1;
-        float v_dist = y2 - y2;
+        float v_dist = y2 - y1;
 
         return sqrt(h_dist * h_dist + v_dist * v_dist);
     }

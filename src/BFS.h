@@ -11,7 +11,7 @@ using namespace std;
 class BFS {
 private:
     int R, C;
-    Grid m;
+    Grid* m;
     int sr, sc, er, ec;
     queue<int> rq;
     queue<int> cq;
@@ -23,6 +23,9 @@ private:
     bool reachedEnd;
 
     vector<vector<bool> > visited;
+    vector<vector<Node*> > parent; // Store parent node for each visited node
+
+    
 
     static int dr[4];
     static int dc[4];
@@ -30,16 +33,16 @@ private:
 public:
     BFS() {}
 
-    BFS(Grid grid) {
-        m = grid;
-        R = m.getHeight();
-        C = m.getWidth();   
+    BFS(Grid& grid) {
+        m = &grid;
+        R = m->getHeight();
+        C = m->getWidth();   
 
-        sr = grid.getStartNode()->x;
-        sc = grid.getStartNode()->y;
+        sr = m->getStartNode()->x;
+        sc = m->getStartNode()->y;
 
-        er = grid.getEndNode()->x;
-        ec = grid.getEndNode()->y;
+        er = m->getEndNode()->x;
+        ec = m->getEndNode()->y;
 
         moveCount = 0;
         nodesLeftInLayer = 1;
@@ -47,6 +50,8 @@ public:
         reachedEnd = false;
 
         visited.assign(R, vector<bool>(C, false));
+        parent.assign(R, vector<Node*>(C, nullptr)); // Initialize parent vector
+
     }
 
     void exploreNeighbours(int r, int c) {
@@ -58,11 +63,12 @@ public:
             if (rr >= R || cc >= C) { continue; }
 
             if (visited[rr][cc]) { continue; }
-            if (m[rr][cc].walkable == false) { continue; }
+            if (m->getNode(rr, cc)->walkable == false) { continue; }
 
             rq.push(rr);
             cq.push(cc);
             visited[rr][cc] = true;
+            parent[rr][cc] = m->getNode(r, c); // Set parent of the next node
             nodesInNextLayer++;
         }
     }
@@ -78,7 +84,9 @@ public:
             int c = cq.front();
             rq.pop(); cq.pop();
 
-            if (&m[r][c] == m.getEndNode()) {
+            Node* currentNode = m->getNode(r, c);
+            Node* endNode = m->getEndNode();
+            if (currentNode->x == endNode->x && currentNode->y == endNode->y) {
                 reachedEnd = true;
                 break;
             }
@@ -91,12 +99,39 @@ public:
                 moveCount++;
             }
         }
-        
         if (reachedEnd) {
             return moveCount;
         }
-
         return -1;
+    }
+
+    // Function to reconstruct path from end node to start node
+    vector<Node*> reconstructPath() {
+        vector<Node*> path;
+        Node* currentNode = m->getEndNode();
+
+        while (currentNode != nullptr) {
+            path.push_back(currentNode);
+            currentNode = parent[currentNode->x][currentNode->y]; // Move to parent node
+        }
+
+        reverse(path.begin(), path.end()); // Reverse the path to get from start to end
+        return path;
+    }
+
+    void printReconstructedPath() {
+        vector<Node*> path = reconstructPath();
+
+        if (path.empty()) {
+            cout << "No path found." << endl;
+            return;
+        }
+
+        cout << "Start: " << sr << ", " << sc << endl;
+        for (size_t i = 1; i < path.size() - 1; ++i) {
+            cout << path[i]->x << ", " << path[i]->y << endl;
+        }
+        cout << "End: " << er << ", " << ec << endl;
     }
 };
 

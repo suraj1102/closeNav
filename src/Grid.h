@@ -1,35 +1,47 @@
 #ifndef GRID
 #define GRID
+#include "Node.h"
 
 class Grid {
 private:
     int height;
     int width;
-    Node*** grid; // 2D array of node pointers
+    vector<vector<Node*> > nodeMatrix; // 2D array of node pointers
     Node* startNode;
     Node* endNode;
 
 public:
-    Grid() {}
+    Grid() : height(0), width(0), startNode(nullptr), endNode(nullptr) {}
+
 
     Grid(int height, int width) : height(height), width(width) {
-        grid = new Node**[height];
+        nodeMatrix.resize(height);
+        for (int i = 0; i < height; i++) {
+            nodeMatrix[i].resize(width);
+        }
         for (int i = 0; i < height; ++i) {
-            grid[i] = new Node*[width];
             for (int j = 0; j < width; ++j) {
-                grid[i][j] = new Node(i , j, false); 
+                nodeMatrix[i][j] = new Node(i, j, false);
             }
         }
     }
 
+    Grid(const Grid& other) : height(other.height), width(other.width) {
+    nodeMatrix.resize(height);
+    for (int i = 0; i < height; ++i) {
+        nodeMatrix[i].resize(width);
+        for (int j = 0; j < width; ++j) {
+            nodeMatrix[i][j] = new Node(*other.nodeMatrix[i][j]);
+        }
+    }
+}
+
     ~Grid() {
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
-                delete grid[i][j];
+                delete nodeMatrix[i][j];
             }
-            delete[] grid[i];
         }
-        delete[] grid;
     }
 
     int getHeight() {
@@ -47,18 +59,18 @@ public:
                 
                 // If pixel is white, set it to walkable, else not walkable
                 bool walkable = (img[index] != 0 && img[index + 1] != 0 && img[index + 2] != 0);
-                grid[i][j]->setWalkable(walkable);
+                nodeMatrix[i][j]->setWalkable(walkable);
 
                 // If pixel is green, make that the startNode
                 if (img[index] == 0 && img[index + 1] == 255 && img[index + 2] == 0) {
-                    grid[i][j]->setWalkable(true);
-                    startNode = grid[i][j];
+                    nodeMatrix[i][j]->setWalkable(true);
+                    startNode = nodeMatrix[i][j];
                 }
 
                 // If pixel is blue, make that the endNode
                 if (img[index] == 0 && img[index + 1] == 0 && img[index + 2] == 255) {
-                    grid[i][j]->setWalkable(true);
-                    endNode = grid[i][j];
+                    nodeMatrix[i][j]->setWalkable(true);
+                    endNode = nodeMatrix[i][j];
                 }                
 
                 index += channels;
@@ -69,7 +81,7 @@ public:
     void printGrid() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                cout << grid[i][j]->isWalkable() << " ";
+                cout << nodeMatrix[i][j]->isWalkable() << " ";
             }
         cout << endl;
         }
@@ -83,13 +95,16 @@ public:
         endNode = node;
     }
 
-    Node* operator[](int index) {
-        if (index >= 0 && index < height) {
-            return *grid[index];
+    Node* getNode(int i, int j) {
+        if (i >= 0 && i < height && j >= 0 && j < width) {
+            return nodeMatrix[i][j];
         } else {
+            // Handle error: Node coordinates out of bounds
+            cout << "Node coordinates out of bounds" << endl;
             return nullptr;
         }
     }
+
 
     Node* getStartNode() {
         return startNode;

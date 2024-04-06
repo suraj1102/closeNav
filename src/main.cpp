@@ -14,10 +14,6 @@ using namespace std;
 const string PATH = "/Users/suraj/Documents/Coding/forUni/final/Path-Finder/assets/";
 const string FILENAME = "10-10.png";
 
-int solve(Grid grid, int sr, int sc, int er, int ec, queue<int>& rq, queue<int>& cq, int& nodes_left_in_layer, int& nodes_in_next_layer);
-
-
-
 int main(void)
 {
     int width, height, channels;
@@ -44,6 +40,9 @@ int main(void)
     BFS search(grid);
     int moves = search.solve();
     cout << moves << endl;
+
+    search.printReconstructedPath();
+    
     
     stbi_image_free(img);
     return 0;
