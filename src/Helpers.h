@@ -8,3 +8,16 @@ void printImgPixelColors(unsigned char* img, int height, int width, int channels
     }
     return;
 }
+
+bool findInPath(vector<Node*> path, int i, int j) {
+    for (Node* node : path) {
+        if (node->x == i && node->y == j) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void outputImage(unsigned char *img, vector<Node*> path) {
+    
+}

@@ -25,8 +25,6 @@ private:
     vector<vector<bool> > visited;
     vector<vector<Node*> > parent; // Store parent node for each visited node
 
-    
-
     static int dr[4];
     static int dc[4];
 
