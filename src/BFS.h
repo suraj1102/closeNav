@@ -1,3 +1,8 @@
+/**
+ * @file BFS.h
+ * @brief Implementation of breadth first search for path finding
+*/
+
 #ifndef BFS_
 #define BFS_
 
@@ -22,10 +27,12 @@ private:
 
     bool reachedEnd;
 
-    vector<vector<bool> > visited;
+    vector<vector<bool> > visited; // 2D matrix inidicating which nodes are visited
     vector<vector<Node*> > parent; // Store parent node for each visited node
 
-    static int dr[4];
+    // Direction vectors for finding neighbours
+    // Defined at the end of this file
+    static int dr[4]; 
     static int dc[4];
 
 public:

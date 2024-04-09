@@ -6,12 +6,13 @@ class Grid {
 private:
     int height;
     int width;
+    int channels;
     vector<vector<Node*> > nodeMatrix; // 2D array of node pointers
     Node* startNode;
     Node* endNode;
 
 public:
-    Grid() : height(0), width(0), startNode(nullptr), endNode(nullptr) {}
+    Grid() : height(0), width(0), channels(0), startNode(nullptr), endNode(nullptr) {}
 
 
     Grid(int height, int width) : height(height), width(width) {
@@ -52,7 +53,12 @@ public:
         return width;
     }
 
+    int getChannels() {
+        return channels;
+    }
+
     void populateGrid(unsigned char* img, int channels) {
+        this->channels = channels;
         int index = 0;
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
@@ -71,7 +77,7 @@ public:
                 if (img[index] == 0 && img[index + 1] == 0 && img[index + 2] == 255) {
                     nodeMatrix[i][j]->setWalkable(true);
                     endNode = nodeMatrix[i][j];
-                }                
+                }
 
                 index += channels;
             }
