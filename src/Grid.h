@@ -28,14 +28,14 @@ public:
     }
 
     Grid(const Grid& other) : height(other.height), width(other.width) {
-    nodeMatrix.resize(height);
-    for (int i = 0; i < height; ++i) {
-        nodeMatrix[i].resize(width);
-        for (int j = 0; j < width; ++j) {
-            nodeMatrix[i][j] = new Node(*other.nodeMatrix[i][j]);
+        nodeMatrix.resize(height);
+        for (int i = 0; i < height; ++i) {
+            nodeMatrix[i].resize(width);
+            for (int j = 0; j < width; ++j) {
+                nodeMatrix[i][j] = new Node(*other.nodeMatrix[i][j]);
+            }
         }
     }
-}
 
     ~Grid() {
         for (int i = 0; i < height; ++i) {
@@ -55,6 +55,32 @@ public:
 
     int getChannels() {
         return channels;
+    }
+
+    void setStart(Node* node) {
+        startNode = node;
+    }
+
+    void setEnd(Node* node) {
+        endNode = node;
+    }
+
+    Node* getStartNode() {
+        return startNode;
+    }
+
+    Node* getEndNode() {
+        return endNode;
+    }
+
+    Node* getNode(int i, int j) {
+        if (i >= 0 && i < height && j >= 0 && j < width) {
+            return nodeMatrix[i][j];
+        } else {
+            // Handle error: Node coordinates out of bounds
+            cout << "Node coordinates out of bounds" << endl;
+            return nullptr;
+        }
     }
 
     void populateGrid(unsigned char* img, int channels) {
@@ -91,33 +117,6 @@ public:
             }
         cout << endl;
         }
-    }
-
-    void setStart(Node* node) {
-        startNode = node;
-    }
-
-    void setEnd(Node* node) {
-        endNode = node;
-    }
-
-    Node* getNode(int i, int j) {
-        if (i >= 0 && i < height && j >= 0 && j < width) {
-            return nodeMatrix[i][j];
-        } else {
-            // Handle error: Node coordinates out of bounds
-            cout << "Node coordinates out of bounds" << endl;
-            return nullptr;
-        }
-    }
-
-
-    Node* getStartNode() {
-        return startNode;
-    }
-
-    Node* getEndNode() {
-        return endNode;
     }
 
 };
