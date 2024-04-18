@@ -14,7 +14,7 @@ using namespace std;
 #include "BFS.h"
 #include "Helpers.h"
 
-const string PATH = "/Users/suraj/Library/CloudStorage/OneDrive-PlakshaUniversity/Classes/Sem2/PDS/project/closeNav/images/in";
+const string PATH = "/Users/suraj/Library/CloudStorage/OneDrive-PlakshaUniversity/Classes/Sem2/PDS/project/closeNav/images/in/";
 const string FILENAME = "50-50.png";
 
 
