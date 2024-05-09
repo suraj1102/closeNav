@@ -13,9 +13,11 @@ using namespace std;
 #include "Grid.h"
 #include "BFS.h"
 #include "Helpers.h"
+// #include "Dijk.h"
+#include "Dijkstra.h"
 
 const string PATH = "/Users/suraj/Library/CloudStorage/OneDrive-PlakshaUniversity/Classes/Sem2/PDS/project/closeNav/images/in/";
-const string FILENAME = "50-50.png";
+const string FILENAME = "10-10.png";
 
 
 int main(void)
@@ -35,17 +37,20 @@ int main(void)
     grid.populateGrid(img, channels);
 
     // printImgPixelColors(img, height, width, channels);
-    // grid.printGrid();
+    grid.printGrid();
 
     grid.getStartNode()->printLocation();
     grid.getEndNode()->printLocation();
     
-    BFS search(grid);
-    int moves = search.solve();
-    cout << moves << endl;
+    Dijkstra search(grid);
 
-    vector<Node*> path = search.reconstructPath();
-    search.printReconstructedPath();
+    vector<Node*> path = search.constructPath();
+
+    // int moves = search.solve();
+    // cout << moves << endl;
+
+    // vector<Node*> path = search.reconstructPath();
+    // search.printReconstructedPath();
 
     writeImage(grid, path);
     

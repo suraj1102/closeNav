@@ -119,6 +119,34 @@ public:
         }
     }
 
+    vector<Node*> getNeighbours(Node* node) {
+        vector<Node*> neighbours;
+        int row = node->x;
+        int col = node->y;
+
+        // Check top neighbour
+        if (row > 0) {
+            neighbours.push_back(nodeMatrix[row - 1][col]);
+        }
+
+        // Check bottom neighbour
+        if (row < height - 1) {
+            neighbours.push_back(nodeMatrix[row + 1][col]);
+        }
+
+        // Check left neighbour
+        if (col > 0) {
+            neighbours.push_back(nodeMatrix[row][col - 1]);
+        }
+
+        // Check right neighbour
+        if (col < width - 1) {
+            neighbours.push_back(nodeMatrix[row][col + 1]);
+        }
+
+        return neighbours;
+    }
+
 };
 
 #endif

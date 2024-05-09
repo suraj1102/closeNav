@@ -38,6 +38,14 @@ public:
 
         return sqrt(h_dist * h_dist + v_dist * v_dist);
     }
+
+    bool operator==(Node* other) {
+        return (this->x == other->x && this->y == other->y);
+    }
+
+    bool isSame(Node* other) {
+        return (this->x == other->x && this->y == other->y);
+    }
 };
 
 #endif
