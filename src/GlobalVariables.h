@@ -23,5 +23,6 @@ Color END_TILE_COLOR = BLUE;
 Color BFS_PATH_COLOR = PINK;
 Color DFS_PATH_COLOR = BROWN;
 Color DJK_PATH_COLOR = LIME;
+Color ASTAR_PATH_COLOR = SKYBLUE;
 
 #endif /* GlobalVariables_h */

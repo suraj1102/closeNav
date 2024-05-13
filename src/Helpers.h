@@ -30,20 +30,13 @@ void printImgPixelColors(unsigned char* img, int height, int width, int channels
  * @param j what column the node is on (node->y)
  * @return boolean indicating if node exists in path
  */
-bool findInPath(vector<Node*> path, int i, int j) {
+bool findInPath(vector<Node*> path, int r, int c) {
     for (Node* node : path) {
-        if (node->x == i && node->y == j) {
+        if (node->r == r && node->c == c) {
             return true;
         }
     }
     return false;
-
-    // for (int i = 0, size = path.size(); i < size; i++) {
-    //     if (path[i]->x == i && path[i]->y == j) {
-    //         return true;
-    //     }
-    // }
-    // return false;
 }
 
 /**

@@ -17,6 +17,7 @@ using namespace std;
 #include "BFS.h"
 #include "DFS.h"
 #include "Dijkstra.h"
+#include "AStar.h"
 
 
 int main(void) {
@@ -149,6 +150,17 @@ int main(void) {
                 recs[path[i]->r][path[i]->c].color = DJK_PATH_COLOR;
             }
         }
+
+        if (IsKeyPressed(KEY_A)) {
+            isPathDone = true;
+            
+            AStar search(*grid);
+            vector<Node*> path = search.findPath();
+            
+            for (int i = 1; i < path.size() - 1; i++) {
+                recs[path[i]->r][path[i]->c].color = ASTAR_PATH_COLOR;
+            }
+        }
         
         if (IsKeyPressed(KEY_R)) {
             initializeRecs(recs, grid);
@@ -156,6 +168,7 @@ int main(void) {
             isPathDone = false;
             cout << "RESET" << endl;
         }
+        
         
         if (IsKeyPressed(KEY_I)) {
             initialized = false;
@@ -184,6 +197,6 @@ int main(void) {
 /// R: restart - removes computed path from map
 /// I: initialize - restores map to the input image
 /// P: print - print grid for debugging purposes
-/// B - BFS
-/// D - DFS
-/// J - DIJKSTRA
+/// B: BFS
+/// D: DFS
+/// J: DIJKSTRA
