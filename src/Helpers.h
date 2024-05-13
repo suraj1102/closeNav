@@ -3,6 +3,7 @@
  * @brief Contains helper functions which will be used in main.cpp
 */
 
+#include "GlobalVariables.h"
 
 /**
  * @brief Simply print the RGB values of each pixel line by line
@@ -114,4 +115,45 @@ void writeImage(Grid& grid, vector<Node*> path) {
     stbi_write_jpg("output.jpg", width, height, channels, out_img, 100);
 
     return;
+}
+/**
+ * @brief Load Image and Populate Grid
+ * @param file_path from GlobalVariables.h
+ * @return pointer to Grid object
+ */
+Grid* loadImage(char* file_path) {
+    int gridWidth, gridHeight, channels;
+    unsigned char *img = stbi_load(
+                                   file_path,
+                                   &gridWidth,
+                                   &gridHeight,
+                                   &channels,
+                                   0
+                                   );
+    if(img == NULL) {
+        cout << "Error in loading the image" << endl;
+        exit(1);
+    }
+    cout << gridHeight << "x" << gridWidth << " px image loaded with " << channels << " channels." << endl;
+    
+    Grid* grid = new Grid(gridHeight, gridWidth);
+    grid->populateGrid(img, channels);
+    
+    return grid;
+}
+
+void initializeRecs(vector<vector<myRectangle>>& recs, Grid* grid) {
+    for (int r = 0; r < grid->getHeight(); r++) {
+        for (int c = 0; c < grid->getWidth(); c++) {
+            if (grid->getNode(r, c)->isSame(grid->getStartNode())) {
+                recs[r][c].color = START_TILE_COLOR;
+            } else if (grid->getNode(r, c)->isSame(grid->getEndNode())) {
+                recs[r][c].color = END_TILE_COLOR;
+            } else if (grid->getNode(r, c)->isWalkable()) {
+                recs[r][c].color = WALKABLE_TILE_COLOR;
+            } else {
+                recs[r][c].color = UNWALKABLE_TILE_COLOR;
+            }
+        }
+    }
 }

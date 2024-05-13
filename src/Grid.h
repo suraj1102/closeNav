@@ -17,30 +17,30 @@ public:
 
     Grid(int height, int width) : height(height), width(width) {
         nodeMatrix.resize(height);
-        for (int i = 0; i < height; i++) {
-            nodeMatrix[i].resize(width);
+        for (int r = 0; r < height; r++) {
+            nodeMatrix[r].resize(width);
         }
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
-                nodeMatrix[i][j] = new Node(i, j, false);
+        for (int r = 0; r < height; ++r) {
+            for (int c = 0; c < width; ++c) {
+                nodeMatrix[r][c] = new Node(r, c, false);
             }
         }
     }
 
     Grid(const Grid& other) : height(other.height), width(other.width) {
         nodeMatrix.resize(height);
-        for (int i = 0; i < height; ++i) {
-            nodeMatrix[i].resize(width);
-            for (int j = 0; j < width; ++j) {
-                nodeMatrix[i][j] = new Node(*other.nodeMatrix[i][j]);
+        for (int r = 0; r < height; ++r) {
+            nodeMatrix[r].resize(width);
+            for (int c = 0; c < width; ++c) {
+                nodeMatrix[r][c] = new Node(*other.nodeMatrix[r][c]);
             }
         }
     }
 
     ~Grid() {
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
-                delete nodeMatrix[i][j];
+        for (int r = 0; r < height; ++r) {
+            for (int c = 0; c < width; ++c) {
+                delete nodeMatrix[r][c];
             }
         }
     }
@@ -73,9 +73,9 @@ public:
         return endNode;
     }
 
-    Node* getNode(int i, int j) {
-        if (i >= 0 && i < height && j >= 0 && j < width) {
-            return nodeMatrix[i][j];
+    Node* getNode(int r, int c) {
+        if (r >= 0 && r < height && c >= 0 && c < width) {
+            return nodeMatrix[r][c];
         } else {
             // Handle error: Node coordinates out of bounds
             cout << "Node coordinates out of bounds" << endl;
@@ -86,23 +86,23 @@ public:
     void populateGrid(unsigned char* img, int channels) {
         this->channels = channels;
         int index = 0;
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
+        for (int r = 0; r < height; ++r) {
+            for (int c = 0; c < width; ++c) {
                 
                 // If pixel is white, set it to walkable, else not walkable
                 bool walkable = (img[index] != 0 && img[index + 1] != 0 && img[index + 2] != 0);
-                nodeMatrix[i][j]->setWalkable(walkable);
+                nodeMatrix[r][c]->setWalkable(walkable);
 
                 // If pixel is green, make that the startNode
                 if (img[index] == 0 && img[index + 1] == 255 && img[index + 2] == 0) {
-                    nodeMatrix[i][j]->setWalkable(true);
-                    startNode = nodeMatrix[i][j];
+                    nodeMatrix[r][c]->setWalkable(true);
+                    startNode = nodeMatrix[r][c];
                 }
 
                 // If pixel is blue, make that the endNode
                 if (img[index] == 0 && img[index + 1] == 0 && img[index + 2] == 255) {
-                    nodeMatrix[i][j]->setWalkable(true);
-                    endNode = nodeMatrix[i][j];
+                    nodeMatrix[r][c]->setWalkable(true);
+                    endNode = nodeMatrix[r][c];
                 }
 
                 index += channels;
@@ -111,9 +111,11 @@ public:
     }
 
     void printGrid() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                cout << nodeMatrix[i][j]->isWalkable() << " ";
+        for (int r = 0; r < height; r++) {
+            for (int c = 0; c < width; c++) {
+                if (nodeMatrix[r][c]->isSame(getStartNode())) cout << "S ";
+                else if (nodeMatrix[r][c]->isSame(getEndNode())) cout << "E ";
+                else cout << nodeMatrix[r][c]->isWalkable() << " ";
             }
         cout << endl;
         }
@@ -121,8 +123,8 @@ public:
 
     vector<Node*> getNeighbours(Node* node) {
         vector<Node*> neighbours;
-        int row = node->x;
-        int col = node->y;
+        int row = node->r;
+        int col = node->c;
 
         // Check top neighbour
         if (row > 0) {
