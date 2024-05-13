@@ -6,10 +6,10 @@ using namespace std;
 #include "GlobalVariables.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
+#include "../stb/stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb/stb_image_write.h"
+#include "../stb/stb_image_write.h"
 
 #include "Node.h"
 #include "Grid.h"
@@ -135,6 +135,8 @@ int main(void) {
             for (int i = 1; i < path.size() - 1; i++) {
                 recs[path[i]->r][path[i]->c].color = BFS_PATH_COLOR;
             }
+
+            writeImage(*grid, path);
         }
         
         if (IsKeyPressed(KEY_J)) {

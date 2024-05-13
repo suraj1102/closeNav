@@ -14,15 +14,21 @@
 
 using namespace std;
 
+/// Class implementing the Dijkstra Algorithm for pathfinding
 class Dijkstra {
 private:
 
+    // Store grid and height and width of grid
     Grid* grid;
     int heightR, widthC;
-
-    unordered_map<Node*, int> distance; //hash table
+    
+    // Hash Tables which keep track of distance and previous node
+    unordered_map<Node*, int> distance;
     unordered_map<Node*, Node*> previous;
-
+    
+    
+    /// Initialize Distances as infinity and previous as NULL
+    /// - Parameter startNode: start node of the grid
     void initializeSingleSource(Node* startNode) { //setting all distances as inf
         for (int i = 0; i < heightR; ++i) {
             for (int j = 0; j < widthC; ++j) {
@@ -35,26 +41,30 @@ private:
         //cout << distance;
     }
 
+    
+    /// Updates distance of node v from node u
+    /// - Parameters:
+    ///   - u: current node
+    ///   - v: u's neighbour whose distance and prev we want to compute
     void relax(Node* u, Node* v) {
         int weight = 1; // Assuming all edges have unit weight
         if (distance[v] > distance[u] + weight) {
             distance[v] = distance[u] + weight;
             previous[v] = u;
         }
-        //cout << previous;
     }
 
     
 public:
-    // Constructor for Dijkstra's algorithm
+    
+    // Constructor
     Dijkstra(Grid& grid) {
-        this->grid = &grid; //why &??
+        this->grid = &grid; //why & - becuase grid* is a pointer
         this->heightR = grid.getHeight();
         this->widthC = grid.getWidth();
     }
-
-    // Function to implement Dijkstra's algorithm
-
+    
+    /// Function to run Dijkstra's algorithm
     void solve() {
         Node* startNode = grid->getStartNode();
         Node* endNode = grid->getEndNode();
@@ -78,7 +88,7 @@ public:
             if (u->isSame(endNode)) // Early exit if the destination is reached
                 break;
             visited.insert(u);
-            for (Node* v: grid->getNeighbours(u)) { //why is this throwing an error 
+            for (Node* v: grid->getNeighbours(u)) {
                 if (v->isWalkable() == false) {
                     continue;
                 }
@@ -88,17 +98,16 @@ public:
                 }
             }
         }
-      //cout << pq;  
     }
         
     
-    // Function to find the minimum path and its weight
+    
+    /// Reconstruct the path using the previous map
     vector<Node*> constructPath() {
         solve();
-        Node* startNode = grid->getStartNode();
+    
         Node* endNode = grid->getEndNode();
 
-        //Node* endNode = grid->getEndNode();
         vector<Node*> path;
 
         if (!endNode) {
@@ -114,20 +123,9 @@ public:
         reverse(path.begin(), path.end());
 
         cout << "PATH:" << endl;
-        // int weight = distance[endNode];
-        // if (weight != numeric_limits<int>::max()) {
-        //     for (size_t i = 0; i < path.size(); ++i) {
-        //         // cout << path[i]->x << " " << path[i]->y;
-        //         // if (i < path.size() - 1)
-        //         //     cout << " -> ";
-        //     }
-        //     cout << " (weight: " << weight << ")" << endl;
-        // } else {
-        //     cerr << "There's no path from " << endl;
-        // }
 
         for (Node* node: path) {
-            cout << "r: " << node->x << " c: " << node->y << endl;
+            cout << "r: " << node->r << " c: " << node->c << endl;
         }
         return path;
     }

@@ -13,17 +13,22 @@
 
 using namespace std;
 
+/// Implementation of Breath First Search on a Grid
+/// based system.
+/// Inspired by the pseudocode from William Fiest.
 class BFS {
 private:
-    int R, C;
-    Grid* m;
-    int sr, sc, er, ec;
-    queue<int> rq;
-    queue<int> cq;
+    int R, C; // Height, Width
+    Grid* m; // Underlying grid
+    int sr, sc, er, ec; // Indices of start and end nodes
+    queue<int> rq; // Queue that stores the row indices
+    queue<int> cq; // Queue that stores the col indices
 
     int moveCount;
-    int nodesLeftInLayer;
-    int nodesInNextLayer;
+    
+    // Exploration layer is analagous to the level or breath BFS is currently at
+    int nodesLeftInLayer; // Nodes left to explore in current exploration layer
+    int nodesInNextLayer; // Nodes left to explore in next exploration layer
 
     bool reachedEnd;
 
@@ -32,33 +37,43 @@ private:
 
     // Direction vectors for finding neighbours
     // Defined at the end of this file
-    static int dr[4]; 
+    static int dr[4];
     static int dc[4];
 
 public:
+    // Default Constructor
     BFS() {}
 
+    // Parameterized Constructor
     BFS(Grid& grid) {
         m = &grid;
         R = m->getHeight();
-        C = m->getWidth();   
+        C = m->getWidth();
 
-        sr = m->getStartNode()->x;
-        sc = m->getStartNode()->y;
+        sr = m->getStartNode()->r;
+        sc = m->getStartNode()->c;
 
-        er = m->getEndNode()->x;
-        ec = m->getEndNode()->y;
+        er = m->getEndNode()->r;
+        ec = m->getEndNode()->c;
 
         moveCount = 0;
         nodesLeftInLayer = 1;
         nodesInNextLayer = 0;
         reachedEnd = false;
 
+        // Initialize visited and parent entries for startNode
+        // visited = false (we'll pop it later)
+        // parent = NULL (start node)
         visited.assign(R, vector<bool>(C, false));
-        parent.assign(R, vector<Node*>(C, nullptr)); // Initialize parent vector
+        parent.assign(R, vector<Node*>(C, nullptr));
 
     }
 
+    
+    /// Checks neighbours of node at r, c and pushes their indices to rq and cq
+    /// - Parameters:
+    ///   - r: row index of node
+    ///   - c: col index of node
     void exploreNeighbours(int r, int c) {
         for (int i = 0; i < 4; i++) {
             int rr = r + dr[i];
@@ -78,6 +93,8 @@ public:
         }
     }
 
+    
+    /// Run the algorithm
     int solve() {
         rq.push(sr);
         cq.push(sc);
@@ -89,9 +106,9 @@ public:
             int c = cq.front();
             rq.pop(); cq.pop();
 
-            Node* currentNode = m->getNode(r, c);
+            Node* currentNode = m->getNode(c, r);
             Node* endNode = m->getEndNode();
-            if (currentNode->x == endNode->x && currentNode->y == endNode->y) {
+            if (currentNode->r == endNode->r && currentNode->c == endNode->c) {
                 reachedEnd = true;
                 break;
             }
@@ -110,20 +127,22 @@ public:
         return -1;
     }
 
-    // Function to reconstruct path from end node to start node
+    /// Function to reconstruct path from end node to start node
     vector<Node*> reconstructPath() {
         vector<Node*> path;
         Node* currentNode = m->getEndNode();
 
         while (currentNode != nullptr) {
             path.push_back(currentNode);
-            currentNode = parent[currentNode->x][currentNode->y]; // Move to parent node
+            currentNode = parent[currentNode->r][currentNode->c]; // Move to parent node
         }
 
         reverse(path.begin(), path.end()); // Reverse the path to get from start to end
         return path;
     }
 
+    
+    /// Print the reconstructed path by calling reconstructPath()
     void printReconstructedPath() {
         vector<Node*> path = reconstructPath();
 
@@ -134,7 +153,7 @@ public:
 
         cout << "Start: " << sr << ", " << sc << endl;
         for (size_t i = 1; i < path.size() - 1; ++i) {
-            cout << path[i]->x << ", " << path[i]->y << endl;
+            cout << path[i]->r << ", " << path[i]->c << endl;
         }
         cout << "End: " << er << ", " << ec << endl;
     }
