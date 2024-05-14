@@ -1,6 +1,7 @@
 #ifndef GRID
 #define GRID
 #include "Node.h"
+using namespace std;
 
 class Grid {
 private:

@@ -1,10 +1,3 @@
-//
-//  AStar.h
-//  FM131ProjectTest
-//
-//  Created by Suraj Dayma on 13/05/24.
-//
-
 #ifndef AStar_h
 #define AStar_h
 
@@ -37,28 +30,8 @@ public:
         return walkable;
     }
 
-    void setWalkable(bool option) {
-        walkable = option;
-        return;
-    }
-
     AStarNode* getParent() {
         return parent;
-    }
-
-    void printLocation() {
-        cout << "row: " << r + 1 << " col: " << c + 1 << endl;
-        return;
-    }
-
-    float distanceTo(Node* node) {
-        int x1 = this->c, x2 = node->c;
-        int y1 = this->r, y2 = node->r;
-
-        float h_dist = x2 - x1;
-        float v_dist = y2 - y1;
-
-        return sqrt(h_dist * h_dist + v_dist * v_dist);
     }
     
     bool isSame(AStarNode* other) {

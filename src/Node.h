@@ -1,6 +1,8 @@
 #ifndef NODE
 #define NODE
 
+using namespace std;
+
 class Node {
 public:
     int c; // col no. - analogous to x coordinate
