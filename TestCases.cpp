@@ -64,7 +64,7 @@ void performBFS(const fs::path& imagePath, ofstream& logFile) {
 
     auto duration = duration_cast<microseconds>(stop - start);
     
-    logFile << "BFS on " << imagePathString << ": " << duration.count() << " milliseconds" << endl;
+    logFile << "BFS on " << imagePathString << ": " << duration.count() << " microseconds" << endl;
 
     // Don't forget to deallocate the memory allocated for imagePathStr
     delete[] imagePathStr;
@@ -87,7 +87,7 @@ void performDFS(const fs::path& imagePath, ofstream& logFile) {
 
     auto duration = duration_cast<milliseconds>(stop - start);
     
-    logFile << "DFS on " << imagePathString << ": " << duration.count() << " milliseconds" << endl;
+    logFile << "DFS on " << imagePathString << ": " << duration.count() << " microseconds" << endl;
 
     // delete memory allocated for imagePathStr
     delete[] imagePathStr;
