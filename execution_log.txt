@@ -1,4 +1,4 @@
-BFS on images/in/10-10.png: 130 milliseconds
-DFS on images/in/10-10.png: 0 milliseconds
-BFS on images/in/50-50.png: 1994 milliseconds
-DFS on images/in/50-50.png: 1 milliseconds
+BFS on images/in/10-10.png: 74 microseconds
+DFS on images/in/10-10.png: 43 microseconds
+BFS on images/in/50-50.png: 792 microseconds
+DFS on images/in/50-50.png: 755 microseconds

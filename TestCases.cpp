@@ -85,7 +85,7 @@ void performDFS(const fs::path& imagePath, ofstream& logFile) {
     search.solve();
     auto stop = high_resolution_clock::now();
 
-    auto duration = duration_cast<milliseconds>(stop - start);
+    auto duration = duration_cast<microseconds>(stop - start);
     
     logFile << "DFS on " << imagePathString << ": " << duration.count() << " microseconds" << endl;
 
